@@ -11,7 +11,9 @@ app.component('posts', {
             cantCategories:3,
             wCategories:0,
             wCarousel:0,
-            post2View:""
+            post2View:"",
+            temp:t_d,
+            d:""
         };
     },
     methods: {
@@ -53,9 +55,14 @@ app.component('posts', {
                 }}})
                 .then(response => {
                     // Aquí puedes manejar la respuesta, por ejemplo, almacenar el contenido del documento
-                    let res = response.data;
-                    document.getElementById("viewerPost").innerHTML = res
-                    console.log('Contenido del documento uu:', res);
+                    let res = response.data.toString();
+                    //let res2 = String.raw`${this.temp}`;
+                    //document.getElementById("viewerPost").innerHTML = String.raw`${this.temp}`
+                    res = res.replace("{","\\{")
+                    res = res.replace("}","\\}")
+                    res = res.replace("`","\\`")
+                    res = res.replace("section","SECFF")
+                    this.d = res
                     // const regex = /<(\w+)>(.*?)<\/\1>/gs;
                     // const extractedData = {};
                     // let match;
@@ -73,7 +80,8 @@ app.component('posts', {
                     // htmlBody += '<pre><code class="language-bash">'+con+'</code></pre>'
                     // document.getElementById("viewerPost").innerHTML = htmlBody
                     // // Display the extracted data
-                    // console.log(extractedData);
+                    console.log("22333");
+                    console.log(res);
                 })
                 .catch(error => {
                     console.error('Error al cargar el documento:', error);
@@ -121,7 +129,6 @@ app.component('posts', {
                 let urlParams = new URLSearchParams(params);
                 var post = urlParams.get('post');
                 var category = urlParams.get('category');
-                console.log(post)
                 this.creaePostTemplate(`https://raw.githubusercontent.com/Code-Chow/ScriptSizzle/refs/heads/main/posts/${category}/${post}.html`)
                 console.log("Response ...")
                 this.intro = false
@@ -274,7 +281,7 @@ app.component('posts', {
 
                                             echo "Hello, World!"
                                         </code></pre>
-                                    <div id="viewerPost">
+                                    <div id="viewerPost" v-html="d">
                                     </div>
                                 </div>
                             </div>

@@ -3,3 +3,227 @@ const blogTitle="ScriptSizzle"
 const blogDesc = "Tu repositorio de referencia"
 const footCenter="By CodeChow Community"
 const footLat = "main.codechow@gmail.com"
+const t_d = new String(`
+<section>
+    <pre><code class="language-bash">
+        #!/bin/bash
+
+        echo "Hello, World!"
+    </code></pre>
+    <div>
+        Este script gestiona los servicios disponibles en una distribución de Ubuntu utilizando \`systemctl\` y \`service\`. Ofrece un menú inicial con una lista de servicios instalados y permite al usuario ver el estado, iniciar, detener y reiniciar un servicio seleccionado. También incluye la opción de salir en cada menú.
+    </div>
+    <div>
+        <pre><code class="language-bash">
+#!/bin/bash
+
+# Función para mostrar el menú de servicios
+function mostrar_menu_servicios {
+echo "----------------------------------------"
+echo "           Lista de Servicios           "
+echo "----------------------------------------"
+servicios=( $(systemctl list-units --type=service --state=running --no-pager | awk '{print $1}' | sed 's/.service//') )
+
+for i in "$\{!servicios[@]\}"; do
+    echo "$((i + 1)). $\{servicios[$i]\}"
+done
+echo "0. Salir"
+echo "----------------------------------------"
+read -p "Selecciona un servicio (0 para salir): " eleccion
+
+if [[ $eleccion -eq 0 ]]; then
+    exit 0
+elif [[ $eleccion -gt 0 && $eleccion -le $\{#servicios[@]\} ]]; then
+    gestionar_servicio "$\{servicios[$((eleccion - 1))]\}"
+else
+    echo "Opción no válida. Intenta de nuevo."
+    mostrar_menu_servicios
+fi
+}
+
+# Función para gestionar un servicio específico
+function gestionar_servicio {
+local nombre_servicio=$1
+echo "----------------------------------------"
+echo "       Gestión del Servicio: $nombre_servicio       "
+echo "----------------------------------------"
+
+while true; do
+    echo "1. Ver estado"
+    echo "2. Iniciar"
+    echo "3. Detener"
+    echo "4. Reiniciar"
+    echo "5. Volver al menú de servicios"
+    echo "0. Salir"
+    echo "----------------------------------------"
+    read -p "Selecciona una opción: " opcion
+    
+    case $opcion in
+        1)
+            systemctl status "$nombre_servicio.service"
+            ;;
+        2)
+            sudo systemctl start "$nombre_servicio.service"
+            echo "$nombre_servicio iniciado."
+            ;;
+        3)
+            sudo systemctl stop "$nombre_servicio.service"
+            echo "$nombre_servicio detenido."
+            ;;
+        4)
+            sudo systemctl restart "$nombre_servicio.service"
+            echo "$nombre_servicio reiniciado."
+            ;;
+        5)
+            mostrar_menu_servicios
+            ;;
+        0)
+            exit 0
+            ;;
+        *)
+            echo "Opción no válida. Intenta de nuevo."
+            ;;
+    esac
+done
+}
+
+# Comenzar el script mostrando el menú de servicios
+mostrar_menu_servicios
+        </code></pre>
+    </div>
+    <div>
+        Cómo usar el script
+        <p>1. Crear el archivo: Copia el código anterior y pégalo en un archivo llamado <code>service_manager.sh</code>.</p>
+        <p>2. Dar permisos de ejecución: Abre una terminal y navega hasta el directorio donde guardaste el archivo. Luego, ejecuta el siguiente comando para dar permisos de ejecución al script:</p>
+        <pre><code class="language-bash">
+chmod +x service_manager.sh
+        </code></pre>
+        <p>3. Ejecutar el script: Inicia el script con el siguiente comando:</p>
+        <pre><code class="language-bash">
+./service_manager.sh
+        </code></pre>
+    </div>
+    <div>
+        Detalles sobre cómo funciona el script
+        <p>- Menú de servicios: Al ejecutarse, el script muestra una lista de servicios en ejecución en el sistema. Utiliza <code>systemctl</code> para listar los servicios disponibles.</p>
+        <p>- Gestión de servicios: Al seleccionar un servicio, se presenta un menú con opciones para ver el estado del servicio, iniciarlo, detenerlo, reiniciarlo o volver al menú de servicios.</p>
+        <p>- Salir: En cada menú, hay una opción para salir del script.</p>
+    </div>
+    <div>
+        Notas adicionales
+        <p>- Este script requiere permisos de superusuario para iniciar, detener o reiniciar servicios, por lo que se te pedirá la contraseña de <code>sudo</code> cuando uses esas opciones.</p>
+        <p>- Asegúrate de tener instalado <code>systemctl</code> y que los servicios que deseas gestionar estén disponibles en tu sistema.</p>
+    </div>
+</section>
+`)
+t_d = `<section>
+<pre><code class="language-bash">
+    #!/bin/bash
+
+    echo "Hello, World!"
+</code></pre>
+<div>
+    Este script gestiona los servicios disponibles en una distribución de Ubuntu utilizando \`systemctl\` y \`service\`. Ofrece un menú inicial con una lista de servicios instalados y permite al usuario ver el estado, iniciar, detener y reiniciar un servicio seleccionado. También incluye la opción de salir en cada menú.
+</div>
+<div>
+    <pre><code class="language-bash">
+#!/bin/bash
+
+# Función para mostrar el menú de servicios
+function mostrar_menu_servicios {
+echo "----------------------------------------"
+echo "           Lista de Servicios           "
+echo "----------------------------------------"
+servicios=( $(systemctl list-units --type=service --state=running --no-pager | awk '{print $1}' | sed 's/.service//') )
+
+for i in "$\{!servicios[@]}"; do
+echo "$((i + 1)). $\{servicios[$i]}"
+done
+echo "0. Salir"
+echo "----------------------------------------"
+read -p "Selecciona un servicio (0 para salir): " eleccion
+
+if [[ $eleccion -eq 0 ]]; then
+exit 0
+elif [[ $eleccion -gt 0 && $eleccion -le $\{#servicios[@]} ]]; then
+gestionar_servicio "$\{servicios[$((eleccion - 1))]}"
+else
+echo "Opción no válida. Intenta de nuevo."
+mostrar_menu_servicios
+fi
+}
+
+# Función para gestionar un servicio específico
+function gestionar_servicio {
+local nombre_servicio=$1
+echo "----------------------------------------"
+echo "       Gestión del Servicio: $nombre_servicio       "
+echo "----------------------------------------"
+
+while true; do
+echo "1. Ver estado"
+echo "2. Iniciar"
+echo "3. Detener"
+echo "4. Reiniciar"
+echo "5. Volver al menú de servicios"
+echo "0. Salir"
+echo "----------------------------------------"
+read -p "Selecciona una opción: " opcion
+
+case $opcion in
+    1)
+        systemctl status "$nombre_servicio.service"
+        ;;
+    2)
+        sudo systemctl start "$nombre_servicio.service"
+        echo "$nombre_servicio iniciado."
+        ;;
+    3)
+        sudo systemctl stop "$nombre_servicio.service"
+        echo "$nombre_servicio detenido."
+        ;;
+    4)
+        sudo systemctl restart "$nombre_servicio.service"
+        echo "$nombre_servicio reiniciado."
+        ;;
+    5)
+        mostrar_menu_servicios
+        ;;
+    0)
+        exit 0
+        ;;
+    *)
+        echo "Opción no válida. Intenta de nuevo."
+        ;;
+esac
+done
+}
+
+# Comenzar el script mostrando el menú de servicios
+mostrar_menu_servicios
+    </code></pre>
+</div>
+<div>
+    Cómo usar el script
+    <p>1. Crear el archivo: Copia el código anterior y pégalo en un archivo llamado <code>service_manager.sh</code>.</p>
+    <p>2. Dar permisos de ejecución: Abre una terminal y navega hasta el directorio donde guardaste el archivo. Luego, ejecuta el siguiente comando para dar permisos de ejecución al script:</p>
+    <pre><code class="language-bash">
+chmod +x service_manager.sh
+    </code></pre>
+    <p>3. Ejecutar el script: Inicia el script con el siguiente comando:</p>
+    <pre><code class="language-bash">
+./service_manager.sh
+    </code></pre>
+</div>
+<div>
+    Detalles sobre cómo funciona el script
+    <p>- Menú de servicios: Al ejecutarse, el script muestra una lista de servicios en ejecución en el sistema. Utiliza <code>systemctl</code> para listar los servicios disponibles.</p>
+    <p>- Gestión de servicios: Al seleccionar un servicio, se presenta un menú con opciones para ver el estado del servicio, iniciarlo, detenerlo, reiniciarlo o volver al menú de servicios.</p>
+    <p>- Salir: En cada menú, hay una opción para salir del script.</p>
+</div>
+<div>
+    Notas adicionales
+    <p>- Este script requiere permisos de superusuario para iniciar, detener o reiniciar servicios, por lo que se te pedirá la contraseña de <code>sudo</code> cuando uses esas opciones.</p>
+    <p>- Asegúrate de tener instalado <code>systemctl</code> y que los servicios que deseas gestionar estén disponibles en tu sistema.</p>
+</div>
+</section>`

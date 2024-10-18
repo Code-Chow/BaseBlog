@@ -46,7 +46,11 @@ app.component('posts', {
             return wrappedLines.join('\n');
         },
         creaePostTemplate(url) {
-            axios.get(url)
+            axios.get(url,{responseType: {
+                headers: {
+                  'Content-Type': 'text/plain;charset=UTF-8',
+                  'Access-Control-Allow-Origin': '*'
+                }}})
                 .then(response => {
                     // Aquí puedes manejar la respuesta, por ejemplo, almacenar el contenido del documento
                     let res = response.data;

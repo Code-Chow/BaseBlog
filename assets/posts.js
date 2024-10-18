@@ -47,6 +47,13 @@ app.component('posts', {
             // Join the wrapped lines back into a single string
             return wrappedLines.join('\n');
         },
+        createP(){
+            fetch('../posts/Automatizacion/1.html')
+            .then(response => response.text())
+            .then(data => {
+                this.d = data;
+            });
+        },
         creaePostTemplate(url) {
             axios.get(url,{responseType: {
                 headers: {
@@ -129,7 +136,8 @@ app.component('posts', {
                 let urlParams = new URLSearchParams(params);
                 var post = urlParams.get('post');
                 var category = urlParams.get('category');
-                this.creaePostTemplate(`https://raw.githubusercontent.com/Code-Chow/ScriptSizzle/refs/heads/main/posts/${category}/${post}.html`)
+                //this.creaePostTemplate(`https://raw.githubusercontent.com/Code-Chow/ScriptSizzle/refs/heads/main/posts/${category}/${post}.html`)
+                this.createP()
                 console.log("Response ...")
                 this.intro = false
             }

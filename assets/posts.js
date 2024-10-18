@@ -48,7 +48,7 @@ app.component('posts', {
             return wrappedLines.join('\n');
         },
         createP(){
-            fetch('../posts/Automatizacion/1.html')
+            fetch('/posts/Automatizacion/1.html')
             .then(response => response.text())
             .then(data => {
                 this.d = data;

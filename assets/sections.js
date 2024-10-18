@@ -117,3 +117,10 @@ app.component('phrases', {
     </section>`
 });
 
+app.component('blog-post', {
+    // formato camelCase en JavaScript
+    props: ['postTitle'],
+    template: '<pre><code class="language-bash" >{{ postTitle }}</code></pre></h3>'
+                                        
+  })
+

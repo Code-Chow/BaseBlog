@@ -18,8 +18,8 @@ echo "           Lista de Servicios           "
 echo "----------------------------------------"
 servicios=( $(systemctl list-units --type=service --state=running --no-pager | awk '{print $1}' | sed 's/.service//') )
 
-for i in "${!servicios[@]}"; do
-    echo "$((i + 1)). ${servicios[$i]}"
+for i in "$\{!servicios[@]}"; do
+    echo "$((i + 1)). $\{servicios[$i]}"
 done
 echo "0. Salir"
 echo "----------------------------------------"
@@ -27,8 +27,8 @@ read -p "Selecciona un servicio (0 para salir): " eleccion
 
 if [[ $eleccion -eq 0 ]]; then
     exit 0
-elif [[ $eleccion -gt 0 && $eleccion -le ${#servicios[@]} ]]; then
-    gestionar_servicio "${servicios[$((eleccion - 1))]}"
+elif [[ $eleccion -gt 0 && $eleccion -le $\{#servicios[@]} ]]; then
+    gestionar_servicio "$\{servicios[$((eleccion - 1))]}"
 else
     echo "Opción no válida. Intenta de nuevo."
     mostrar_menu_servicios

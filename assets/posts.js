@@ -13,7 +13,8 @@ app.component('posts', {
             wCarousel:0,
             post2View:"",
             temp:t_d,
-            d:""
+            d:``,
+            e:t_d
         };
     },
     methods: {
@@ -47,19 +48,55 @@ app.component('posts', {
             // Join the wrapped lines back into a single string
             return wrappedLines.join('\n');
         },
-        createP(){
-            fetch('/posts/Automatizacion/1.html')
-            .then(response => response.text())
-            .then(data => {
-                this.d = data;
-            });
+        createP(url) {
+            let regex = /<(\w+)>(.*?)<\/\1>/gs;
+            let extractedData = {};
+            let match;
+            axios.get(url)
+                .then(response => {
+                    let res = response.data;
+                    while ((match = regex.exec(res)) !== null) {
+                        let tag = match[1]; // The tag name
+                        let content = match[2].trim(); // The content of the tag
+                        let searchCode = /codigo/gsi;
+                        if(!searchCode.test(tag)) {
+                            content = this.putTagText(content,"p")
+                        }
+                        extractedData[tag] = content; // Store in the object
+                    }
+                    console.log('extractedData')
+                    console.log(extractedData)
+                    let dt = extractedData['codigo']
+                    let ldt = dt.split('\n')
+                    console.log('DT')
+                    console.log(ldt)
+                    
+                    let r = ``
+                    for(let i of ldt){
+                        i = new String(i.trim()).normalize()
+                        i = i.replace(/\n/g, '')
+                        if(i != ""){
+                            r = `${r}
+                            ${i}`
+                        }
+                        
+                    }
+                    console.log('R')
+                    console.log(r)
+                    this.d = r
+                    console.log("-----D")
+                    console.log(typeof(this.d))
+                    console.log(this.d)
+                    console.log("-----E")
+                    console.log(typeof(this.e))
+                    console.log(this.e)
+                })
+                .catch(error => {
+                    console.error('Error al cargar el documento:', error);
+                });
         },
         creaePostTemplate(url) {
-            axios.get(url,{responseType: {
-                headers: {
-                  'Content-Type': 'text/plain;charset=UTF-8',
-                  'Access-Control-Allow-Origin': '*'
-                }}})
+            axios.get(url)
                 .then(response => {
                     // Aquí puedes manejar la respuesta, por ejemplo, almacenar el contenido del documento
                     let res = response.data.toString();
@@ -136,8 +173,8 @@ app.component('posts', {
                 let urlParams = new URLSearchParams(params);
                 var post = urlParams.get('post');
                 var category = urlParams.get('category');
-                this.creaePostTemplate(`https://raw.githubusercontent.com/Code-Chow/ScriptSizzle/refs/heads/main/posts/${category}/${post}.html`)
-                //this.createP()
+                //this.creaePostTemplate(`https://raw.githubusercontent.com/Code-Chow/ScriptSizzle/refs/heads/main/posts/${category}/${post}.html`)
+                this.createP(`https://raw.githubusercontent.com/Code-Chow/ScriptSizzle/refs/heads/main/posts/${category}/${post}.html`)
                 console.log("Response ...")
                 this.intro = false
             }
@@ -276,21 +313,16 @@ app.component('posts', {
                                     </div>
                                 </div>
                                 <div v-else>
-                                        <pre><code class="language-python">
-                                            def greet(name):
-                                                print(f"Hello, {name}!")
-
-                                            greet("World")
-                                                </code></pre>
-
-                                                <h2>Bash Example</h2>
-                                                <pre><code class="language-bash">
-                                            #!/bin/bash
-
-                                            echo "Hello, World!"
+                                        <pre><code class="language-bash" >
+                                        {{ d }}
                                         </code></pre>
-                                    <div id="viewerPost" v-html="d">
+                                         <pre><code class="language-bash" >
+                                        {{ e }}
+                                        </code></pre>
+                                    <div id="viewerPost" >
                                     </div>
+                                    <blog-post :post-title="d"></blog-post>
+                                    <blog-post :post-title="e"></blog-post>
                                 </div>
                             </div>
                         </div>

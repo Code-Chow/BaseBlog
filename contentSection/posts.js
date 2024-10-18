@@ -1,7 +1,7 @@
 
 app.component('contentPost', {
     template: `
-    <h2>En nuestras categorias podra encontrar:
+    <h2>En nuestras categorias podra encontrar:</h2>
     <p>
         - <span>Automatización de Tareas</span>: Discute scripts que pueden automatizar tareas repetitivas, como la gestión de archivos, la entrada de datos y las copias de seguridad.
     </p>

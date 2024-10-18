@@ -15,6 +15,66 @@ app.component('posts', {
         };
     },
     methods: {
+        putTagText(text,tag){
+            // Split the text into lines
+            const lines = text.split('\n');
+
+            // Regular expression to check for existing HTML tags
+            const regex = /<[^>]+>/; // Matches any HTML tag
+            const codigoAper = /<codigo.*?>/gsi; // Matches <codigo>...</codigo> blocks
+            const codigoCier = /<\/codigo>/gsi;
+            let block = false
+            // Map through each line and wrap it with <p> tags if it doesn't contain any HTML tags and is not within <codigo> tags
+            const wrappedLines = lines.map(line => {
+                // Check if the line is part of a <codigo> block
+                if (codigoAper.test(line)) {
+                    block = true
+                    return line; // Return the line unchanged if it's within a <codigo> block
+                }
+                if (codigoCier.test(line)) {
+                    block = false
+                    return line; // Return the line unchanged if it's within a <codigo> block
+                }
+                // Check if the line contains any HTML tags
+                if (!regex.test(line.trim()) && block == false) {
+                    return `<p>${line.trim()}</p>`; // Wrap with <p> tags
+                }
+                return line; // Return the line unchanged if it contains HTML tags
+            });
+
+            // Join the wrapped lines back into a single string
+            return wrappedLines.join('\n');
+        },
+        creaePostTemplate(url) {
+            axios.get(url)
+                .then(response => {
+                    // Aquí puedes manejar la respuesta, por ejemplo, almacenar el contenido del documento
+                    let res = response.data;
+                    document.getElementById("viewerPost").innerHTML = res
+                    console.log('Contenido del documento uu:', res);
+                    // const regex = /<(\w+)>(.*?)<\/\1>/gs;
+                    // const extractedData = {};
+                    // let match;
+                    // // Execute regex and populate the object
+                    // while ((match = regex.exec(res)) !== null) {
+                    //     let tag = match[1]; // The tag name
+                    //     let content = match[2].trim(); // The content of the tag
+                    //     let searchCode = /codigo.*/gsi;
+                    //     if(!searchCode.test(tag)) {
+                    //         content = this.putTagText(content,"p")
+                    //     }
+                    //     extractedData[tag] = content; // Store in the object
+                    // }
+                    // let con = extractedData['codigobash'].replace("'","")
+                    // htmlBody += '<pre><code class="language-bash">'+con+'</code></pre>'
+                    // document.getElementById("viewerPost").innerHTML = htmlBody
+                    // // Display the extracted data
+                    // console.log(extractedData);
+                })
+                .catch(error => {
+                    console.error('Error al cargar el documento:', error);
+                });
+        },
         moveSlide(direction){
             let slidesContent = document.getElementById('contCarousel')
             let wSlide = Object.keys(this.dataPosts).length;
@@ -56,8 +116,10 @@ app.component('posts', {
             if(iParms != -1 && cParms != -1){
                 let urlParams = new URLSearchParams(params);
                 var post = urlParams.get('post');
+                var category = urlParams.get('category');
                 console.log(post)
-                this.$parent.loadExtData(`https://raw.githubusercontent.com/claicode/test/refs/heads/main/test.html`)
+                this.creaePostTemplate(`https://raw.githubusercontent.com/Code-Chow/ScriptSizzle/refs/heads/main/posts/${category}/${post}.html`)
+                console.log("Response ...")
                 this.intro = false
             }
         },
@@ -195,6 +257,19 @@ app.component('posts', {
                                     </div>
                                 </div>
                                 <div v-else>
+                                        <pre><code class="language-python">
+                                            def greet(name):
+                                                print(f"Hello, {name}!")
+
+                                            greet("World")
+                                                </code></pre>
+
+                                                <h2>Bash Example</h2>
+                                                <pre><code class="language-bash">
+                                            #!/bin/bash
+
+                                            echo "Hello, World!"
+                                        </code></pre>
                                     <div id="viewerPost">
                                     </div>
                                 </div>

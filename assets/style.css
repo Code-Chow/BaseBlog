@@ -342,3 +342,11 @@ nav {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
 }
+
+pre {
+  background-color: #272822;
+  color: #f8f8f2;
+  padding: 15px;
+  border-radius: 5px;
+  overflow-x: auto;
+}

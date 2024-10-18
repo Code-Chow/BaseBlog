@@ -136,8 +136,8 @@ app.component('posts', {
                 let urlParams = new URLSearchParams(params);
                 var post = urlParams.get('post');
                 var category = urlParams.get('category');
-                //this.creaePostTemplate(`https://raw.githubusercontent.com/Code-Chow/ScriptSizzle/refs/heads/main/posts/${category}/${post}.html`)
-                this.createP()
+                this.creaePostTemplate(`https://raw.githubusercontent.com/Code-Chow/ScriptSizzle/refs/heads/main/posts/${category}/${post}.html`)
+                //this.createP()
                 console.log("Response ...")
                 this.intro = false
             }

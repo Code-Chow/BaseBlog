@@ -1,0 +1,91 @@
+<section class="post">
+    <div>
+        Este script permite obtener información sobre el uso de CPU, RAM y disco duro de una manera visual utilizando colores y ASCII Art para simular una interfaz atractiva desde la terminal.
+    </div>
+    <div>
+        <pre><code class="language-bash">#!/bin/bash
+
+# Función para mostrar el uso de CPU
+function mostrar_cpu {
+    uso_cpu=$(top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print 100 - $1}')
+    echo -e "Uso de CPU: \e[32m$uso_cpu%\e[0m"
+    echo "██████████████████████████████████████████████████████████████████████████████████████████████"
+    for ((i=0; i<uso_cpu; i+=2)); do
+        echo -n "█"
+    done
+    echo ""
+}
+
+# Función para mostrar el uso de RAM
+function mostrar_ram {
+    uso_ram=$(free | grep Mem | awk '{print $3/$2 * 100.0}')
+    echo -e "Uso de RAM: \e[34m$uso_ram%\e[0m"
+    echo "██████████████████████████████████████████████████████████████████████████████████████████████"
+    for ((i=0; i<uso_ram; i+=2)); do
+        echo -n "█"
+    done
+    echo ""
+}
+
+# Función para mostrar el uso de Disco
+function mostrar_disco {
+    uso_disco=$(df -h | grep '/$' | awk '{print $5}' | sed 's/%//')
+    echo -e "Uso de Disco: \e[31m$uso_disco%\e[0m"
+    echo "██████████████████████████████████████████████████████████████████████████████████████████████"
+    for ((i=0; i<uso_disco; i+=2)); do
+        echo -n "█"
+    done
+    echo ""
+}
+
+# Menú principal
+function mostrar_menu {
+    echo "----------------------------------------"
+    echo "       Monitor de Recursos del Sistema   "
+    echo "----------------------------------------"
+    mostrar_cpu
+    mostrar_ram
+    mostrar_disco
+    echo "----------------------------------------"
+    echo "0. Salir"
+    echo "----------------------------------------"
+    read -p "Presiona cualquier tecla para actualizar o 0 para salir: " opcion
+    if [[ $opcion -eq 0 ]]; then
+        exit 0
+    else
+        mostrar_menu
+    fi
+}
+
+# Comenzar el script mostrando el menú
+mostrar_menu
+        </code></pre>
+    </div>
+    <div>
+        <h2 class="title">Cómo usar el script</h2>
+        <p>1. Crear el archivo: Copia el código anterior y pégalo en un archivo llamado <code>monitor_recursos.sh</code>.</p>
+        <p>2. Dar permisos de ejecución: Abre una terminal y navega hasta el directorio donde guardaste el archivo. Luego, ejecuta el siguiente comando para dar permisos de ejecución al script:</p>
+        <pre><code class="language-bash">chmod +x monitor_recursos.sh        </code></pre>
+        <p>3. Ejecutar el script: Inicia el script con el siguiente comando:</p>
+        <pre><code class="language-bash">./monitor_recursos.sh        </code></pre>
+    </div>
+    <div>
+        <h2 class="title">Detalles sobre cómo funciona el script</h2>
+        <p>- Menú de recursos: Al ejecutarse, el script muestra el uso de CPU, RAM y disco duro de manera visual.</p>
+        <p>- Gráficos de uso: Utiliza caracteres ASCII para representar gráficamente el uso de recursos.</p>
+        <p>- Actualización: El script permite actualizar la información en tiempo real hasta que el usuario decida salir.</p>
+    </div>
+    <div>
+        <h2 class="title">Notas adicionales</h2>
+        <p>- Este script requiere que se ejecute en un entorno de terminal compatible con ANSI para que los colores se muestren correctamente.</p>
+        <p>- Asegúrate de tener los permisos necesarios para ejecutar los comandos utilizados en el script.</p>
+    </div>
+    <div>
+        <h2 class="title">Enlaces Relacionados</h2>
+        <ul>
+            <li><a href="https://www.gnu.org/software/coreutils/manual/html_node/free-invocation.html" target="_blank">Documentación de free</a></li>
+            <li><a href="https://man7.org/linux/man-pages/man1/top.1.html" target="_blank">Documentación de top</a></li>
+            <li><a href="https://man7.org/linux/man-pages/man1/df.1.html" target="_blank">Documentación de df</a></li>
+        </ul>
+    </div>
+</section>

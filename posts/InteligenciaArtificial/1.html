@@ -1,0 +1,98 @@
+<section class="post">
+    <div>
+        Este script gestiona consultas utilizando `bito` CLI. Ofrece un menú inicial con varias opciones para interactuar con el modelo, gestionar configuraciones y generar soluciones de desarrollo de software.
+    </div>
+    <div>
+        <pre><code class="language-bash">#!/bin/bash
+
+# Función para editar el archivo de configuración de Bito
+function editar_configuracion {
+    nano ~/.bito/config.json
+}
+
+# Función para consultar el contexto de las consultas realizadas
+function consultar_contexto {
+    echo "Consultando contexto de las consultas anteriores..."
+    cat ~/.bito/contexto.txt
+}
+
+# Función para realizar una consulta al modelo
+function consulta_modelo {
+    read -p "Ingresa tu consulta: " consulta
+    read -p "¿Deseas guardar la salida en un archivo? (s/n): " guardar
+    if [[ $guardar == "s" ]]; then
+        read -p "Ingresa la ruta de salida: " ruta_salida
+        bito query "$consulta" > "$ruta_salida"
+        echo "Consulta guardada en $ruta_salida"
+    else
+        bito query "$consulta"
+    fi
+}
+
+# Función para consultar soluciones de desarrollo de software
+function consultar_soluciones {
+    read -p "Ingresa la ruta donde deseas guardar la solución: " ruta_solucion
+    read -p "Ingresa el nombre del template de Bito: " template
+    bito generate "$template" --output "$ruta_solucion"
+    echo "Solución generada en $ruta_solucion"
+}
+
+# Función para concatenar la salida de un documento
+function consulta_documento {
+    read -p "Ingresa la ruta del documento: " ruta_documento
+    read -p "Ingresa tu consulta: " consulta
+    bito query --context "$ruta_documento" "$consulta"
+}
+
+# Menú principal
+while true; do
+    echo "----------------------------------------"
+    echo "       Menú de Consultas con Bito      "
+    echo "----------------------------------------"
+    echo "1. Editar configuración de Bito"
+    echo "2. Consultar contexto de consultas"
+    echo "3. Realizar consulta al modelo"
+    echo "4. Consultar soluciones de desarrollo de software"
+    echo "5. Consultar documento"
+    echo "0. Salir"
+    echo "----------------------------------------"
+    read -p "Selecciona una opción: " opcion
+
+    case $opcion in
+        1) editar_configuracion ;;
+        2) consultar_contexto ;;
+        3) consulta_modelo ;;
+        4) consultar_soluciones ;;
+        5) consulta_documento ;;
+        0) exit 0 ;;
+        *) echo "Opción no válida. Intenta de nuevo." ;;
+    esac
+done
+        </code></pre>
+    </div>
+    <div>
+        <h2 class="title">Cómo usar el script</h2>
+        <p>1. Crear el archivo: Copia el código anterior y pégalo en un archivo llamado <code>bito_manager.sh</code>.</p>
+        <p>2. Dar permisos de ejecución: Abre una terminal y navega hasta el directorio donde guardaste el archivo. Luego, ejecuta el siguiente comando para dar permisos de ejecución al script:</p>
+        <pre><code class="language-bash">chmod +x bito_manager.sh        </code></pre>
+        <p>3. Ejecutar el script: Inicia el script con el siguiente comando:</p>
+        <pre><code class="language-bash">./bito_manager.sh        </code></pre>
+    </div>
+    <div>
+        <h2 class="title">Detalles sobre cómo funciona el script</h2>
+        <p>- Menú de Bito: Al ejecutarse, el script muestra un menú con varias opciones para interactuar con el modelo y gestionar configuraciones.</p>
+        <p>- Funciones: Cada opción del menú llama a una función específica que realiza la tarea correspondiente.</p>
+        <p>- Salir: Hay una opción para salir del script en el menú principal.</p>
+    </div>
+    <div>
+        <h2 class="title">Notas adicionales</h2>
+        <p>- Asegúrate de tener instalado <code>bito</code> en tu sistema antes de ejecutar el script.</p>
+        <p>- El script requiere que los archivos de configuración y contexto existan en el directorio especificado.</p>
+    </div>
+    <div>
+        <h2 class="title">Enlaces Relacionados</h2>
+        <ul>
+            <li><a href="https://bito.dev/docs" target="_blank">Documentación oficial de Bito</a></li>
+        </ul>
+    </div>
+</section>

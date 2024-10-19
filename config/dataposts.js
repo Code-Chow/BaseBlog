@@ -28,11 +28,11 @@ const dataToPosts = {
     ],
     "Utilidades":[
         {
-            "title":"blog 1ww",
-            "description":"blog 1ww",
+            "title":"Gestion de Videos co FFMPEG",
+            "description":"Reducir, crear y algunas funciones de edicion de video desde tu terminal",
             "date":"02/02/2024",
-            "id":"2",
-            "img":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAoHshq6d8B8PxHy5XaQWCPgsgFqYnRnjJj-oO01qaSS-XicfxFRgHoIwWyZXg_ptCQrQ&usqp=CAU"
+            "id":"1",
+            "img":"https://trac.ffmpeg.org/ffmpeg-logo.png"
         },
     ],
     "Trucos":[
@@ -41,7 +41,7 @@ const dataToPosts = {
             "description":"blog 1ww",
             "date":"02/02/2024",
             "id":"1",
-            "img":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAoHshq6d8B8PxHy5XaQWCPgsgFqYnRnjJj-oO01qaSS-XicfxFRgHoIwWyZXg_ptCQrQ&usqp=CAU"
+            "img":"https://trac.ffmpeg.org/ffmpeg-logo.png"
         },
     ],
 

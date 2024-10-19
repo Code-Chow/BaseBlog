@@ -1,0 +1,105 @@
+<section class="post">
+    <div>
+        Este script gestiona tareas de manipulación de videos utilizando `ffmpeg`. Permite reducir el tamaño de un video, crear un video a partir de imágenes y audio, unir varios videos y agregar textos a un video en tiempos específicos.
+    </div>
+    <div>
+        <pre><code class="language-bash">#!/bin/bash
+
+# Función para reducir el tamaño de un video
+function reducir_video {
+    read -p "Ingresa el nombre del video de entrada: " video_entrada
+    read -p "Ingresa el nombre del video de salida: " video_salida
+    read -p "Ingresa la calidad (por ejemplo, 28 para .mp4): " calidad
+    ffmpeg -i "$video_entrada" -vcodec libx264 -crf "$calidad" "$video_salida"
+    echo "Video reducido guardado como $video_salida"
+}
+
+# Función para crear un video a partir de imágenes y audio
+function crear_video {
+    read -p "Ingresa el directorio de imágenes: " dir_imagenes
+    read -p "Ingresa el archivo de audio: " audio
+    read -p "Ingresa el nombre del video de salida: " video_salida
+    read -p "Ingresa los FPS (frames por segundo): " fps
+    ffmpeg -framerate "$fps" -i "$dir_imagenes/%d.jpg" -i "$audio" -c:v libx264 -c:a aac -strict experimental -shortest "$video_salida"
+    echo "Video creado y guardado como $video_salida"
+}
+
+# Función para unir varios videos
+function unir_videos {
+    read -p "Ingresa los nombres de los videos a unir (separados por espacio): " -a videos
+    read -p "Ingresa el nombre del video de salida: " video_salida
+    echo "Creando archivo de texto para la concatenación..."
+    for f in "${videos[@]}"; do echo "file '$PWD/$f'" >> lista_videos.txt; done
+    ffmpeg -f concat -safe 0 -i lista_videos.txt -c copy "$video_salida"
+    echo "Videos unidos y guardados como $video_salida"
+    rm lista_videos.txt
+}
+
+# Función para agregar texto a un video
+function agregar_texto {
+    read -p "Ingresa el video de entrada: " video_entrada
+    read -p "Ingresa el nombre del video de salida: " video_salida
+    read -p "Ingresa los textos en formato JSON (ejemplo: [{\"texto\":\"Hola\",\"inicio\":5,\"fin\":10}]): " textos_json
+    comandos=""
+    for texto in $(echo "$textos_json" | jq -c '.[]'); do
+        t=$(echo "$texto" | jq -r '.texto')
+        inicio=$(echo "$texto" | jq -r '.inicio')
+        fin=$(echo "$texto" | jq -r '.fin')
+        comandos+="drawtext=text='$t':start_time=$inicio:enable='between(t,$inicio,$fin)',"
+    done
+    comandos=${comandos%,} # Eliminar la última coma
+    ffmpeg -i "$video_entrada" -vf "$comandos" -codec:a copy "$video_salida"
+    echo "Texto agregado y guardado como $video_salida"
+}
+
+# Menú principal
+while true; do
+    echo "----------------------------------------"
+    echo "         Menú de FFmpeg                "
+    echo "----------------------------------------"
+    echo "1. Reducir tamaño de video"
+    echo "2. Crear video a partir de imágenes y audio"
+    echo "3. Unir varios videos"
+    echo "4. Agregar texto a un video"
+    echo "0. Salir"
+    echo "----------------------------------------"
+    read -p "Selecciona una opción: " opcion
+
+    case $opcion in
+        1) reducir_video ;;
+        2) crear_video ;;
+        3) unir_videos ;;
+        4) agregar_texto ;;
+        0) exit 0 ;;
+        *) echo "Opción no válida. Intenta de nuevo." ;;
+    esac
+done
+        </code></pre>
+    </div>
+    <div>
+        <h2 class="title">Cómo usar el script</h2>
+        <p>1. Crear el archivo: Copia el código anterior y pégalo en un archivo llamado <code>video_manager.sh</code>.</p>
+        <p>2. Dar permisos de ejecución: Abre una terminal y navega hasta el directorio donde guardaste el archivo. Luego, ejecuta el siguiente comando para dar permisos de ejecución al script:</p>
+        <pre><code class="language-bash">chmod +x video_manager.sh        </code></pre>
+        <p>3. Ejecutar el script: Inicia el script con el siguiente comando:</p>
+        <pre><code class="language-bash">./video_manager.sh        </code></pre>
+    </div>
+    <div>
+        <h2 class="title">Detalles sobre cómo funciona el script</h2>
+        <p>- Menú de FFmpeg: Al ejecutarse, el script muestra un menú con varias opciones para manipular videos utilizando <code>ffmpeg</code>.</p>
+        <p>- Funciones: Cada opción del menú llama a una función específica que realiza la tarea correspondiente.</p>
+        <p>- Salir: Hay una opción para salir del script en el menú principal.</p>
+    </div>
+    <div>
+        <h2 class="title">Notas adicionales</h2>
+        <p>- Asegúrate de tener instalado <code>ffmpeg</code> y <code>jq</code> en tu sistema antes de ejecutar el script.</p>
+        <p>- El script requiere que los archivos de video y audio existan en el directorio especificado.</p>
+    </div>
+    <div>
+        <h2 class="title">Enlaces Relacionados</h2>
+        <ul>
+            <li><a href="https://ffmpeg.org/documentation.html" target="_blank">Documentación oficial de FFmpeg</a></li>
+            <li><a href="https://stedolan.github.io/jq/" target="_blank">Documentación de jq</a></li>
+        </ul>
+    </div>
+</section>

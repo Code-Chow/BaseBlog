@@ -1,0 +1,79 @@
+<section class="post">
+    <div>
+        Este script obtiene los logs del sistema de Ubuntu y permite iterar sobre ellos para buscar contexto y posibles soluciones en Stack Overflow.
+    </div>
+    <div>
+        <pre><code class="language-bash">#!/bin/bash
+
+# Función para mostrar los logs y buscar errores
+function mostrar_logs {
+    # Obtener los últimos 100 logs del sistema
+    logs=$(journalctl -n 100 --no-pager)
+    echo "$logs"
+    
+    # Iterar sobre cada línea del log
+    echo "$logs" | while read -r line; do
+        if [[ "$line" == *"error"* || "$line" == *"fail"* ]]; then
+            echo "----------------------------------------"
+            echo "Error encontrado: $line"
+            echo "Buscando soluciones en Stack Overflow..."
+            buscar_soluciones "$line"
+        fi
+    done
+}
+
+# Función para buscar soluciones en Stack Overflow
+function buscar_soluciones {
+    local error_mensaje="$1"
+    # Reemplazar espacios por '+' para la búsqueda en URL
+    local query=$(echo "$error_mensaje" | sed 's/ /+/g')
+    local url="https://stackoverflow.com/search?q=$query"
+    echo "Consulta: $url"
+}
+
+# Menú principal
+function mostrar_menu {
+    echo "----------------------------------------"
+    echo "     Verificador de Logs del Sistema    "
+    echo "----------------------------------------"
+    echo "1. Mostrar logs y buscar errores"
+    echo "0. Salir"
+    echo "----------------------------------------"
+    read -p "Selecciona una opción: " opcion
+    case $opcion in
+        1) mostrar_logs ;;
+        0) exit 0 ;;
+        *) echo "Opción no válida. Intenta de nuevo." ;;
+    esac
+}
+
+# Comenzar el script mostrando el menú
+mostrar_menu
+        </code></pre>
+    </div>
+    <div>
+        <h2 class="title">Cómo usar el script</h2>
+        <p>1. Crear el archivo: Copia el código anterior y pégalo en un archivo llamado <code>verificar_logs.sh</code>.</p>
+        <p>2. Dar permisos de ejecución: Abre una terminal y navega hasta el directorio donde guardaste el archivo. Luego, ejecuta el siguiente comando para dar permisos de ejecución al script:</p>
+        <pre><code class="language-bash">chmod +x verificar_logs.sh        </code></pre>
+        <p>3. Ejecutar el script: Inicia el script con el siguiente comando:</p>
+        <pre><code class="language-bash">./verificar_logs.sh        </code></pre>
+    </div>
+    <div>
+        <h2 class="title">Detalles sobre cómo funciona el script</h2>
+        <p>- Menú de verificación: Al ejecutarse, el script muestra un menú para mostrar los logs del sistema y buscar errores.</p>
+        <p>- Búsqueda de errores: Se analizan los logs en busca de palabras clave como "error" o "fail".</p>
+        <p>- Soluciones en Stack Overflow: Para cada error encontrado, se genera un enlace de búsqueda en Stack Overflow.</p>
+    </div>
+    <div>
+        <h2 class="title">Notas adicionales</h2>
+        <p>- Este script requiere permisos de superusuario para acceder a los logs del sistema, por lo que se te puede pedir la contraseña de <code>sudo</code>.</p>
+        <p>- Asegúrate de tener instalado <code>journalctl</code> en tu sistema.</p>
+    </div>
+    <div>
+        <h2 class="title">Enlaces Relacionados</h2>
+        <ul>
+            <li><a href="https://www.freedesktop.org/wiki/Software/systemd/journalctl/" target="_blank">Documentación de journalctl</a></li>
+        </ul>
+    </div>
+</section>

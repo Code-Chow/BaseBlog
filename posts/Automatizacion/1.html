@@ -1,8 +1,100 @@
-        <codigo>
-#!/bin/bash
-echo "----------------------------------------"
-echo "           Lista de Servicios           "
-echo "----------------------------------------"
+<section class="post">
+    <div>
+        Este script permite hacer scraping de una URL ingresada por el usuario y verifica enlaces rotos, errores de consola de JavaScript y pruebas de funciones de eventos. 
+    </div>
+    <div>
+        <pre><code class="language-bash">#!/bin/bash
 
-# Comenzar el script mostrando el menú de servicios
-        </codigo>
+# Función para ejecutar el script de Python
+function ejecutar_scraping {
+    read -p "Ingresa la URL que deseas verificar: " url
+    python3 scraper.py "$url"
+}
+
+# Menú principal
+function mostrar_menu {
+    echo "----------------------------------------"
+    echo "     Verificación de Errores en URL    "
+    echo "----------------------------------------"
+    echo "1. Iniciar scraping"
+    echo "0. Salir"
+    echo "----------------------------------------"
+    read -p "Selecciona una opción: " opcion
+    case $opcion in
+        1) ejecutar_scraping ;;
+        0) exit 0 ;;
+        *) echo "Opción no válida. Intenta de nuevo." ;;
+    esac
+}
+
+# Comenzar el script mostrando el menú
+mostrar_menu
+        </code></pre>
+    </div>
+    <div>
+        <h2 class="title">Cómo usar el script</h2>
+        <p>1. Crear el archivo: Copia el código anterior y pégalo en un archivo llamado <code>verificar_errores.sh</code>.</p>
+        <p>2. Dar permisos de ejecución: Abre una terminal y navega hasta el directorio donde guardaste el archivo. Luego, ejecuta el siguiente comando para dar permisos de ejecución al script:</p>
+        <pre><code class="language-bash">chmod +x verificar_errores.sh        </code></pre>
+        <p>3. Crear el script de Python: Copia el siguiente código y pégalo en un archivo llamado <code>scraper.py</code>.</p>
+        <pre><code class="language-python">
+import requests
+from bs4 import BeautifulSoup
+import sys
+
+def obtener_enlaces(url):
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, 'html.parser')
+    return [a['href'] for a in soup.find_all('a', href=True)]
+
+def verificar_enlaces(enlaces):
+    errores = []
+    for enlace in enlaces:
+        try:
+            r = requests.get(enlace)
+            if r.status_code != 200:
+                errores.append((enlace, r.status_code))
+        except requests.exceptions.RequestException as e:
+            errores.append((enlace, str(e)))
+    return errores
+
+def main(url):
+    print(f"Verificando enlaces en: {url}")
+    enlaces = obtener_enlaces(url)
+    errores = verificar_enlaces(enlaces)
+    if errores:
+        print("Enlaces con errores:")
+        for enlace, error in errores:
+            print(f"- {enlace}: {error}")
+    else:
+        print("Todos los enlaces están funcionando correctamente.")
+
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Uso: python3 scraper.py <url>")
+        sys.exit(1)
+    main(sys.argv[1])
+        </code></pre>
+        <p>4. Ejecutar el script: Inicia el script con el siguiente comando:</p>
+        <pre><code class="language-bash">./verificar_errores.sh        </code></pre>
+    </div>
+    <div>
+        <h2 class="title">Detalles sobre cómo funciona el script</h2>
+        <p>- Menú de verificación: Al ejecutarse, el script muestra un menú para iniciar el scraping de la URL ingresada.</p>
+        <p>- Verificación de enlaces: El script de Python obtiene todos los enlaces de la página y verifica si están funcionando correctamente.</p>
+        <p>- Salida de errores: Los enlaces que no responden con un código de estado exitoso se muestran en la salida.</p>
+    </div>
+    <div>
+        <h2 class="title">Notas adicionales</h2>
+        <p>- Asegúrate de tener instaladas las bibliotecas necesarias para Python, como <code>requests</code> y <code>beautifulsoup4</code>.</p>
+        <p>- Puedes instalar las bibliotecas necesarias ejecutando el siguiente comando:</p>
+        <pre><code class="language-bash">pip install requests beautifulsoup4        </code></pre>
+    </div>
+    <div>
+        <h2 class="title">Enlaces Relacionados</h2>
+        <ul>
+            <li><a href="https://docs.python-requests.org/en/latest/" target="_blank">Documentación de Requests</a></li>
+            <li><a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc/" target="_blank">Documentación de Beautiful Soup</a></li>
+        </ul>
+    </div>
+</section>

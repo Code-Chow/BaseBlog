@@ -1,6 +1,6 @@
 <section class="post">
     <div>
-        Este script permite obtener información sobre el uso de CPU, RAM y disco duro de una manera visual utilizando colores y ASCII Art para simular una interfaz atractiva desde la terminal.
+        Este script permite obtener información sobre el uso de CPU, RAM y disco duro.
     </div>
     <div>
         <pre><code class="language-bash">
@@ -11,7 +11,7 @@ function mostrar_cpu {
     uso_cpu=$(top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print 100 - $1}')
     echo -e "Uso de CPU: \e[32m$uso_cpu%\e[0m"
     echo "██████████████████████████████████████████████████████████████████████████████████████████████"
-    for ((i=0; i<uso_cpu; i+=2)); do
+    for ((i=0; i < uso_cpu; i+=2)); do
         echo -n "█"
     done
     echo ""
@@ -22,7 +22,7 @@ function mostrar_ram {
     uso_ram=$(free | grep Mem | awk '{print $3/$2 * 100.0}')
     echo -e "Uso de RAM: \e[34m$uso_ram%\e[0m"
     echo "██████████████████████████████████████████████████████████████████████████████████████████████"
-    for ((i=0; i<uso_ram; i+=2)); do
+    for ((i=0; i < uso_ram; i+=2)); do
         echo -n "█"
     done
     echo ""
@@ -33,7 +33,7 @@ function mostrar_disco {
     uso_disco=$(df -h | grep '/$' | awk '{print $5}' | sed 's/%//')
     echo -e "Uso de Disco: \e[31m$uso_disco%\e[0m"
     echo "██████████████████████████████████████████████████████████████████████████████████████████████"
-    for ((i=0; i<uso_disco; i+=2)); do
+    for ((i=0; i < uso_disco; i+=2)); do
         echo -n "█"
     done
     echo ""

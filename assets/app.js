@@ -66,7 +66,7 @@ const app = Vue.createApp({
                     <div>
                     </div>
                     <div style="text-align:center;">
-                        <h2 cass="title">{{ objPost.title }}<h2>
+                        <h2 cass="title">{{ objPost.title }}</h2>
                     </div>
                     <div>
                     </div>

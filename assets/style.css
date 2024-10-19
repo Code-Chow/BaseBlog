@@ -170,7 +170,7 @@ nav {
 .gridContainer {
     display: grid;
     column-gap: 5vh;
-    grid-template-columns: auto auto;
+    grid-template-columns: calc(var(--L-post-size) * 0.46) calc(var(--L-post-size) * 0.46);
     /* padding: 1vh; */
     row-gap: 1vh;
   }

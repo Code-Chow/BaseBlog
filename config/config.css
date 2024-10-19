@@ -1,9 +1,9 @@
 :root {
-    --dark-color: #0a1624;
+    --dark-color: #212f3c;
     --accent-color: #03d2f9;
     --text-1-color: #e0e0e0;
-    --medium-light-color: #4F5F6F;
-    --medium-dark-color: #1A2A3A;
+    --medium-light-color: #5F6F7F;
+    --medium-dark-color: #3A4A5A;
     --text-l: 2.25vh;
     --text-m: 1.75vh;
     --text-s: 1.5vh;
@@ -15,6 +15,7 @@
     --m-top-border: var(--m-border) var(--m-border) 0px 0px;
     --R-post-size:56px;
     --L-post-size:calc(100vw - (var(--R-post-size) - 1vh));
+    --L-post-in-size:calc(100vw - (var(--R-post-size) - 2.6vh));
     --WSlides:5vw;
     --font-pral:'Philosopher';
     --font-content:'Lora'

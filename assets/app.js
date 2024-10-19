@@ -8,10 +8,30 @@ const app = Vue.createApp({
             blogTitle:blogTitle,
             blogDesc:blogDesc,
             footCenter:footCenter,
-            footLat:footLat
+            footLat:footLat,
+            post:false,
+            htmlContent:"",
+            actualPost:{},
+            data: dataToPosts,
+            objPost:{}
         };
     },
     methods: {
+        fetchHtml(url){
+            console.log("POST")
+            console.log(this.actualPost)
+            fetch(url)
+                .then(response => response.text())
+                .then(data => {
+                    this.htmlContent = data;
+                    this.$nextTick(() => {
+                        hljs.highlightAll();
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching HTML:', error);
+                });
+        },
         changePage(page) {
             this.currentPage = page;
             let sections = document.querySelectorAll('.botMenu');
@@ -19,48 +39,47 @@ const app = Vue.createApp({
                 section.classList.remove('active')
             }
             document.getElementById("menu_"+page).classList.add('active')
-            //this.update_size()
-        },
-        loadExtData(url) {
-            // const configGet = {
-            //     url: url,
-            //     method: 'GET',
-            //     headers: {
-            //         'Access-Control-Allow-Origin': '*'
-            //     }
-            // };
-            //let url = `https://raw.githubusercontent.com/claicode/base_blog/refs/heads/main/assets/terminalTexts.json`;
-            axios.get(url)
-                .then(response => {
-                    // Aquí puedes manejar la respuesta, por ejemplo, almacenar el contenido del documento
-                    this.extDta = response.data;
-                    //document.getElementById("viewerPost").innerHTML = this.extDta
-                    console.log('Contenido del documento:', this.extDta);
-                })
-                .catch(error => {
-                    console.error('Error al cargar el documento:', error);
-                });
-            return this.extDta
-        },
+        }
 
     },
     mounted() {
-        //this.loadData()
         this.changePage('posts')
-        //document.getElementById('').addEventListener("click",this.loadExtData())
     },
     template: `
         <header id="head" class="hiddenOverflow stHeader">
             <section id="headContent" class="container hiddenOverflow layautHead">
                 <div class="gridBase gridNav" >
                     <h1 class="title" style="text-align:left">{{ blogTitle }}</h1>
-                    <h2>{{ blogDesc }}</h2>
+                    <h2 style="color:var(--text-1-color)">{{ blogDesc }}</h2>
                     <figure style="height: 3vh;margin: 1vh;text-align: end;">
                         <img id="img_logo" src="assets/logo.png" alt="Logo del Blog" style="width: 3.5vh;">
                     </figure>
                 </div>
             </section>
-            <nav id="navigatorContent" class="hiddenOverflow layautHead">
+            <div v-if="post" id="navViewer" class="container layautHead">
+                <div class="gridBase gridPost">
+                    <div>
+                         <a href="index.html" class="botS botM" style="left: 1vh;position: absolute;top: 1vh;">
+                            Atras
+                        </a>
+                    </div>
+                    <div>
+                    </div>
+                    <div style="text-align:center;">
+                        <h2 cass="title">{{ objPost.title }}<h2>
+                    </div>
+                    <div>
+                    </div>
+                    <div>
+                    </div>
+                    <div>
+                         <div class="botS botM" style="right: 1vh;position: absolute;top: 1vh;">
+                            Copiar
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <nav id="navigatorContent" class="hiddenOverflow layautHead" v-else>
                 <ul class="container full" style="padding: 0;">
                     <li class="container full">
                         <div id="menu_home" class="botMenu" @click="changePage('home')">
@@ -84,7 +103,8 @@ const app = Vue.createApp({
             <article id="contentContent" class="container hiddenOverflow containerSection">
                 <section class="hiddenOverflow containerSection" >
                     <div class="containerMargin">
-                        <component :is="currentPage"></component>
+                        <blog-post :content="htmlContent" v-if="post"></blog-post>
+                        <component :is="currentPage" v-else></component>
                     </div>
                 </section>
             </article>
@@ -94,7 +114,7 @@ const app = Vue.createApp({
             <section id="footContent" class="container hiddenOverflow layautHead">
                 <div class="gridBase gridNav" >
                     <h1 style="text-align:left"></h1>
-                    <h1> {{ footCenter }}</h1>
+                    <h1 class="title"> {{ footCenter }}</h1>
                     <h2 style="text-align:right"> {{ footLat }} </h2>
                 </div>
             </section>

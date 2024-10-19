@@ -118,6 +118,9 @@ chmod +x service_manager.sh
 `)
 t_d = `
     #!/bin/bash
-
-    echo "Hello, World!"
+                            # Función 33para mostrar el menú de servicios
+                            echo "----------------------------------------"
+                            echo "           Lista de Servicios           "
+                            echo "----------------------------------------"
+                            # Comenzar el script mostrando el menú de servicios"
 `

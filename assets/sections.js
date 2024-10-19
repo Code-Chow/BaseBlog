@@ -65,13 +65,12 @@ app.component('phrases', {
         };
     },
     methods: {
+        
         getTextData(){
             axios.get(this.url)
                 .then(response => {
-                    // Aquí puedes manejar la respuesta, por ejemplo, almacenar el contenido del documento
                     this.texts = response.data;
-                    //document.getElementById("viewerPost").innerHTML = this.extDta
-                    console.log('Contenido del documento:', this.extDta);
+                    console.log('Contenido del documento 222:', this.extDta);
                 })
                 .catch(error => {
                     console.error('Error al cargar el documento:', error);
@@ -118,9 +117,20 @@ app.component('phrases', {
 });
 
 app.component('blog-post', {
-    // formato camelCase en JavaScript
-    props: ['postTitle'],
-    template: '<pre><code class="language-bash" >{{ postTitle }}</code></pre></h3>'
-                                        
+    props: ['content'],
+    methods:{
+    },
+    mounted(){
+        
+    },
+
+    template: `
+    <div id="contentViewer" style="display:flex">
+        <div v-html="content" class="contentLIn">
+        </div>
+        <div class="contentR">
+        </div>
+    </div>
+    `
   })
 
